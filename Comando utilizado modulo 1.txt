@@ -1,0 +1,203 @@
+Para la configuración de red usando DHCP
+DHCP (Dynamic Host Configuration Protocol) permite que el sistema obtenga automáticamente una dirección IP de un servidor DHCP sin intervención manual.
+
+El primer metodo es: Usando dhclient
+
+sudo dhclient eth0
+
+eth0 es el nombre de la interfaz de red. Puedes verificar el nombre correcto con:
+
+ip a
+
+Si deseo eliminar o renovar usando dhcp:
+
+
+sudo dhclient -r eth0
+sudo dhclient eth0
+
+El segundo metodo: Usando nmcli (NetworkManager)
+Para verificar la conexión actual:
+
+
+nmcli device show eth0
+Para configurar la interfaz en modo DHCP:
+
+
+sudo nmcli con mod eth0 ipv4.method auto
+sudo nmcli con up eth0
+
+tercer metodo: Editando /etc/network/interfaces 
+Edita el archivo de configuración:
+
+
+sudo nano /etc/network/interfaces
+
+
+cpp
+auto eth0
+iface eth0 inet dhcp
+
+Guarda y reinicia la red:
+
+
+sudo systemctl restart networking
+
+Para la Ip Estatica:
+
+
+Si deseas configurar una dirección IP manualmente en lugar de usar DHCP:
+
+primer metodo: Usando ip (Temporal)
+
+sudo ip addr add 192.168.1.100/24 dev eth0
+sudo ip route add default via 192.168.1.1
+
+Para verificar:
+
+ip a show eth0
+
+Segundo metodo: Usando nmcli (Permanente)
+
+sudo nmcli con mod eth0 ipv4.addresses 192.168.1.100/24
+
+
+
+Para la creacion de usuario y permisos:
+
+. Crear un usuario (dario_cueto)
+
+sudo adduser dario_cueto
+
+
+. Agregar usuario al grupo sudoers 
+
+sudo usermod -aG sudo dario_cueto
+
+usermod → Modifica un usuario.
+
+-aG → Agrega al grupo sin quitar otros.
+
+Agregar usuario al grupo  
+
+sudo usermod -aG sudo dario_cueto
+
+. Verificar los grupos del usuario
+
+groups dario_cueto
+Muestra los grupos a los que pertenece el usuario.
+
+. Crear un grupo llamado guest
+
+sudo groupadd guest
+
+. Agregar dario_cueto al grupo guest
+
+sudo usermod -aG guest dario_cueto
+
+. Agrega el usuario al grupo guest.
+
+. Verificar si el usuario dario_cueto fue eliminado
+
+id dario_cueto
+Si el usuario no existe, mostrará un error.
+
+. Eliminar el usuario dario_cueto y su carpeta personal
+
+sudo deluser --remove-home dario_cueto
+
+Si deluser no funciona, usar:
+
+sudo userdel -r dario_cueto
+
+. Verificar si dario_cueto tiene procesos activos antes de eliminarlo
+
+11. Eliminar el grupo guest
+
+sudo groupdel guest
+
+
+Otorgar y quitar permisos de archivos:
+
+. Crear una carpeta llamada materia
+
+mkdir materia
+
+. Acceder a la carpeta materia
+
+cd materia
+
+. Crear un archivo estudiante.txt
+
+touch estudiante.txt
+
+. Editar estudiante.txt con vi
+
+vi estudiante.txt
+
+Dentro de vi:
+
+Presiona i: Para ingresar texto.
+
+(texto agregar)
+
+Esc para salir del modo de edición.
+
+Guarda y sal con:
+
+:wq
+
+w = Guardar.
+q = Salir.
+
+. Ver permisos del archivo
+
+ls -l estudiante.txt
+
+
+. Modificar permisos para que solo dario_cueto tenga control total
+
+chmod 700 estudiante.txt
+
+7 (rwx) = Usuario tiene permisos totales.
+0 (---) = Grupo y otros no tienen acceso.
+
+. Cambiar el grupo propietario a guest
+
+sudo chown :guest estudiante.txt
+
+. Modificar permisos para que solo el grupo guest tenga control total
+
+chmod 070 estudiante.txt
+
+0 (---) = Usuario sin permisos.
+7 (rwx) = Grupo con acceso total.
+
+. Crear una nueva carpeta materia2 y copiar estudiante.txt dentro
+
+mkdir ../materia2
+cp estudiante.txt ../materia2/
+
+10. Verificar que el archivo fue copiado
+
+ls -l ../materia2/
+Muestra los archivos dentro de materia2.
+
+. Eliminar la carpeta materia junto con el archivo
+
+cd ..
+rm -rf materia
+rm -r = Elimina recursivamente.
+-f = Fuerza la eliminación.
+
+. Eliminar la carpeta materia2 junto con su archivo
+
+rm -rf materia2
+rm -rf → Borra la carpeta y su contenido.
+
+
+Si rm -rf no funciona, prueba:
+
+. Cambiar permisos antes de eliminar materia2
+
+sudo chmod -R 777 materia2
+
