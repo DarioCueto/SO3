@@ -1,0 +1,39 @@
+1- Como actualizar los repositorios del sistema:
+
+sudo apt update
+sudo apt upgrade -y
+
+2- Enumerar los repositorios actualmente en uso: 
+(Podemos usar dos comandos)
+
+cat /etc/apt/sources.list
+ls /etc/apt/sources.list.d/
+
+3- Instalar y agregar bashtop al sistema:
+
+Para buscar:
+
+apt-cache search bashtop
+
+* En caso de no estar instalada cuando querramos abrir la aplicacion nos dira que no esta instalada y si la deseamos instalar. 
+Tambien podemos usar los comando de instalacion y hacerlo nosotros mismos. *
+
+sudo apt install bashtop -y
+
+* Agregar al repositorio: *
+
+sudo add-apt-repository ppa:bashtop-monitor/bashtop
+sudo apt update
+sudo apt install bashtop -y
+
+* Para ejecutar: *
+
+bashtop
+
+4- Desinstalar Bashtop y eliminar archivos de configuración:
+
+sudo apt purge bashtop -y
+
+5- Eliminar dependencias innecesarias:
+
+sudo apt autoremove -y
