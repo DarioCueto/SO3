@@ -1,0 +1,63 @@
+1- Para crear un trabajo cron para actualizar el sistema a las 11 p.m:
+
+sudo crontab -e
+
+Agregar al final del texto:
+
+0 23 * * * apt update
+0 23 * * * apt upgrade -y
+
+Ctrl + X, luego Y y Enter. PARA GUARDAR Y CERRAR
+
+2- Para programar un reinicio del sistema todos los domingos a las 3 a.m:
+
+sudo crontab -e
+
+Agregar al final del texto:
+
+0 3 * * 0 /sbin/shutdown -r now
+
+3- Usar at para eliminar el contenido de /tmp en 1 minuto
+
+Instalamos primero o si esta instalado verificamos que este activo:
+
+Para instalar: 
+
+sudo apt install at -y
+
+Para verificar que esta activo:
+
+sudo systemctl start atd
+sudo systemctl enable atd
+
+*Ahora para programar la eliminacion del contenido de /tmp:*
+
+at now + 1 minute
+rm -rf /tmp/*
+
+Ctrl + D para confirmar
+
+Si se guardo correctamente aparecera algo como:
+
+job 3 at Sat Feb 8 12:45:00 2025
+
+Verificamos la tarea fue creada:
+
+atq
+
+Aparecera algo como:
+
+job 3 at Sat Feb 8 12:45:00 2025
+
+(El 3 representa la cola de la tarea)
+
+Para ver mas detalles de la tarea usamos el comando:
+
+at -c 3
+
+Luego de 1 minuto confirmamos si la tarea aun esta ingresando el comando
+
+atq
+
+
+
