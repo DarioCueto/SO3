@@ -1,0 +1,45 @@
+Para entrar al menu de Grub:
+
+sudo nano /etc/default/grub
+
+Para guardar y salir Ctrl X 
+
+Actualizar el grub:
+
+Sudo update-grub
+
+Reiniciar maquina: 
+
+Sudo reboot
+
+--------------------------------------
+
+En el apartado de grub al iniciar la maquina presionar e
+
+En el apartado de arranque despues de linea "Linux" al final agregaremos este comando
+init=/bin/bash
+
+Ctrl X para guardar
+
+Luego en los sistemas de ficheros agregar el comando de escritura:
+
+mount -o remount rw /
+
+luego modificar el fichero shadow agregando el comando:
+
+vi /etc/shadow
+
+Mostrara los ficheros actuales, iremos hasta el final donde ese encuentran todos los usuarios creados, al usurio que vamos a 
+cambiar la clave borramos todos lo que hay entre los dos puntos de este usuario, debe de quedar algo como:
+
+Juanito::88888:0:99999:7:::
+
+Luego de esto agregamos wq para poder escribir y cambiar la clave a nuestro usuario, agregamos el comando 
+
+passwd dario10 (el nombre del usuario)
+
+Nos pedira la clave y listo.
+
+Para salir y reiniciar nuestro pc dentro de estos ficheros ejecutar el comando:
+
+exec /sbin/init
