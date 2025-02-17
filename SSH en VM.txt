@@ -1,0 +1,56 @@
+Verificar que nuestra VM esta en adaptador puente
+
+Luego hacer ping en nuestra maquina virtual para saber nuestra ip con el comando:
+
+ip a 
+
+luego de esto vamos a actualizar los repositorios e instalar nuestro ssh:
+
+sudo apt update 
+sudo apt install openssh-server -y
+sudo systemctl enable ssh
+sudo systemctl start ssh
+sudo systemctl status ssh
+
+Luego vamos a nuestro power shell
+
+hacemos ping a nuestra maquina con:
+
+ping 10.0.0.39
+
+luego de verificar si el ping es correcto conectamos al ssh:
+
+ssh dario10@10.0.0.39
+
+Entramos a nuestra maquina virtual a traves de la maquina host poniendo la clave de esta.
+
+Luego vamos a otra ventana del power shell para crear las llaves, ponemos el comando:
+
+ssh-keygen -t rsa -b 4096
+
+Luego damos yes y espacio y espacio para que se cree nuestra llave publica y privada, luego de esto verificamos si esta creada entrando al ssh y verificando:
+
+cd ~/.ssh
+ls
+
+Ingresamos al archivo y copiamos la llave, luego la pegamos en un archivo de texto en nuestro escritorio:
+
+cat id_rsa.pub
+
+*Regresando a nuestra maquina virtual ingresamos a la misma carpeta de creacion*
+
+cd ~/.ssh
+ls (para verificar que tiene)
+
+Creamos un archivo para pegar la llave que copiamos y guardamos en nuestra maquina host:
+
+touch authorized_keys
+nano authorized_keys
+
+Luego de haber creado y pegado la llave, guardamos y le damos los permisos de ejecucion al archivo:
+
+chmod 700 authorized_keys
+chmod +x authorized_keys
+chmod +x ~/.ssh
+
+Salimos de esta y volvemos a entrar sin la clave, listo 
