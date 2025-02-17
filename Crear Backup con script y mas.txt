@@ -1,0 +1,63 @@
+Crear el archivo script con el comando:
+
+nano backup_usuario.sh
+
+luego poner dentro del archivo los comando:
+
+#!/bin/bash
+
+# Obtener la fecha y hora actual en formato dd-mm-yyyy_hh:mm
+fecha=$(date '+%d-%m-%Y_%H-%M')
+
+# Definir el nombre del archivo de backup
+archivo="backup_${fecha}.tar.gz"
+
+# Crear el backup de la carpeta /home/(tu_usuario)
+tar -czvf "$archivo" "/home/$USER"
+
+# Mostrar mensaje de confirmación
+echo "Backup creado: $archivo"
+
+esto no creara una copia de seguridad con la fecha y hora en ese formato junto con dicho archivo.
+
+Ctrl + x para guardar y salir.
+
+Darle los permisos de ejecucion con el comando:
+
+chmod +x backup_usuario.sh
+
+luego abrir y listo
+
+./backup_usuario.sh
+
+==========================================================
+
+Crear el script siguiente:
+
+nano guardar_ifconfig.sh
+
+Editarlo y agregarle este comando:
+
+#!/bin/bash
+
+# Solicitar el nombre del archivo al usuario
+read -p "Ingresa el nombre del archivo para guardar el resultado de ifconfig: " nombre_archivo
+
+# Definir la ruta al escritorio
+ruta="$HOME/Escritorio/${nombre_archivo}.txt"
+
+# Guardar el resultado de ifconfig en el archivo
+ifconfig > "$ruta" 2>/dev/null || ip a > "$ruta"
+
+# Mostrar mensaje de confirmación
+echo "El resultado de ifconfig se ha guardado en: $ruta"
+
+Ctrol + x para guardar y salir
+
+Darle permisos de ejecucion:
+
+chmod +x guardar_ifconfig.sh
+
+Ejecutarlo y listo:
+
+./guardar_ifconfig.sh
