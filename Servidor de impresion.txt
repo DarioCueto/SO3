@@ -1,0 +1,40 @@
+Instalar cups y cups pdf:
+
+Sudo apt install cups cups-pdf -y
+
+Comandos para conectar y correr el programa:
+
+Sudo systemctl enable cups
+Sudo systemctl start cups
+Sudo systemctl status cups
+
+Ir a la caperta de instalacion /etc/cups y editar el archivo cupsd.conf
+
+Sudo nano /etc/cups/cupsd.conf
+
+Dentro de este debemos de otorgarle los permisos al servidor agregando Allow all 
+
+Agregar Listen 0.0.0.0:631 para que sea escuchado por la direccion Ip
+
+Agregar los permisos a nuestro usuario con el comando:
+
+Sudo usermod -aG lpadmin $(whoami)
+
+Agregar el acceso remoto y la impresora compartida, se puede hacer directamente desde la interfaz grafica o desde la terminal.
+
+Sudo cupsctl --remote-admin --remote-any --share-printers
+
+Reiniciar cups:
+
+Sudo systemctl restart cups
+
+Luego de esto entrar a nuestra pc host con la Direccion Ip de nuestra maquina virtual + el puerto
+
+10.0.0.35:631
+
+Una vez dentro vamos a nuestra maquina virtual, buscamos printer y agregamos una nueva maquina
+En nuestra pc Host confirmamos que haya sido agregada, dame click a esa impresora y copiamos dicha URL
+Agregamos la impresora en nuestra maquina Host manualmente, seleccionamos la opcion de agregar direccion manualmente, esta estara con la direccion ip, el puerto y el nombre de la maquina 
+Recordar que al momento de agregarla manualmente debe de ser sin la s, es decir: Http://
+Luego de ser agregado imprimimos una hoja de prueba confirmamos y vamos a word e imprimimos un documento
+Listo

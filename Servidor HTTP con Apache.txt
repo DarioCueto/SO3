@@ -1,0 +1,68 @@
+Para instalar apache2 utilizamos el comando:
+
+Sudo apt install apache2 -y
+
+Iniciamos el programa con los comandos:
+
+Sudo systemctl enable apache2
+Sudo systemctl start apache2
+Sudo systemctl status apache2
+
+Entramos a nuestro navegador con la direccion 127.0.0.1 vemos que apache esta instalado 
+
+Vamos a crear una pagina y modificarla para que dentro diga hola mundo
+
+Ir al archivo donde esta html
+
+cd /var/www/html
+ls
+
+borramos el archivo index.html y creamos uno nuevo
+
+Sudo rm index.html
+Sudo nano index.html
+
+Utilizando el lenguaje html podemos la frase
+
+<html>
+<body>
+<h1> Hola Mundo </h1>
+</body>
+</html>
+
+Reinciamos apache:
+
+Sudo systemctl restart apache2
+
+Entramos apache2 en la interfaz grafica y vemos lo creado.
+
+Esta vez vamos a cambiar nuestro puerto a 8080 para que sea escuchado y cambiar lo que dice la pagina:
+
+Vamos a la carpeta donde esta creado apache
+
+cd /etc/apache2
+ls
+
+Editamos el archivo ports.conf
+
+Sudo nano ports.conf
+
+El puerto escuchado es el 80, lo editamos y ponemos 8080, Ctrl X para guardar y salir, dandole a Y para confirmar lo guardado
+
+Volvemos al archivo index.html y editamos con nuestro nombre, matricula y materia en mi caso
+
+<html>
+<body>
+<h1> Dario Cueto 2024-1461 Sistemas Operativos III </h1>
+</body>
+</html>
+
+Guardamos y reiniciamos apache2
+
+Sudo systemctl restart apache2
+
+Ahora para entrar por dicho puerto debemos de poner la direccion ip + el puerto
+
+http://127.0.0.1:8080
+
+Listo
