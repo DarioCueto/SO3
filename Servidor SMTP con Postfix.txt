@@ -1,0 +1,78 @@
+Primero instalar postfix y mailutils:
+
+Sudo apt install postfix mailutils -y
+
+Iniciar el programa con los comandos:
+
+Sudo apt systemctl start postfix
+Sudo apt systemctl enable postfix
+Sudo apt systemctl status postfix
+
+Accedemos a la carpeta del programa
+
+cd /etc/postfix
+
+En dicha carpeta hacemos un ls y editamos el archivo main.cf
+
+Sudo nano /etc/postfix/main.cf
+
+En dicho archivo debemos agregar algunas lineas como las de abajo
+
+inet_interfaces = all
+relayhost = [smtp.gmail.com]:587
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+smtp_sasl_security _options = noanonymous
+smtp_tls_security_level = encrypt
+smtp_tls_CAfile = /etc/ssl/certs/ca/certificates.crt
+myhostname = Anthony94773
+
+Cabe destacar que estas lineas vienen por defecto en el mismo archivo, debemos ponerle un simbolo de numero de lante (#) para que sea marcado como un comentario.
+
+Guardar y salir Ctrl + X 
+
+Crear el archivo de las claves:
+
+Sudo nano /etc/postfix/sasl_passwd
+
+En dicho comando debe de estar el relayhost el correo que enviara y la clave por aplicacion generada por tu propio correo
+
+[smtp.gmail.com]:587 dariodelrosario515@gmail.com:1234 1234 1234 1234 
+
+Nota: Para generar las claves de aplicacion en Google, solo debemos activar la verificacion de dos pasos, ir al administrador de cuenta, buscar contraseñas de apliacion, agregarle un nombre y crear.
+
+Luego de que nuestro archivo este creado le damos los permisos.
+
+Sudo chmod 600 /etc/postfix/sasl_passwd
+
+Habilitamos el puerto 587 instalando un firewall
+
+Sudo apt install ufw -y
+
+Lo activamos con el comando:
+
+Sudo apt systemctl start ufw
+Sudo apt systemctl enable ufw
+Sudo apt systemctl status ufw
+
+Para abrir el puerto:
+
+Sudo ufw allow 587
+
+Verificamos:
+
+Sudo ufw status 
+
+Para enviar un correo esta debe de ser la estructura:
+
+echo "Cuerpo del mensaje" | mail -s "Asunto" Correo al que se enviará
+
+El ejemplo que mande fue este:
+
+echo "Dario Antonio Cueto Del Rosario 2024-1461" | mail -s "MambruSeFueALaGuerra" os3conadrian@gmail.com
+
+Luego de esto verificamos que no tenemos el correo enviado y sin problemas con el comando:
+
+mailq 
+
+Si el mensaje aparece vacio significa que fue enviado con éxito
