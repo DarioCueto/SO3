@@ -1,0 +1,42 @@
+Instalamos suricata con el comando:
+
+Sudo apt install suricata -y
+
+Configuramos suricata accediendo al directorio de rules para crear las reglas de deteccion de IP
+
+cd /var/lib/suricata
+cd rules
+
+Creamos un archivo nuevo con el nombre que querramos, en mi caso se llama HOLA
+
+Sudo nano HOLA 
+
+Escribimos las reglas de deteccion de IP, para ping, ssh, ftp y ssh:
+
+alert icmp any any -> $HOME_NET any (msg: "Hay tráfico de ICMP"; sid:1000001;)
+alert tcp any any -> $HOME_NET 21 (msg: "Hay tráfico de FTP, Puerto 21"; sid:1000002;)
+alert tcp any any -> $HOME_NET 22 (msg: "Hay tráfico de SSH, Puerto 22"; sid:1000003;)
+alert tcp any any -> $HOME_NET 80 (msg: "Hay tráfico de HTTP, Puerto 80"; sid:1000004;)
+
+Luego accedemos al archivo de configuracion de suricata:
+
+Sudo nano /etc/suricata/suricata.yaml
+
+Al final de dicho archivo encontraremos la linea llamada rule-files donde agregaremos el nombre de nuestro archivo que tiene las reglas de deteccion
+
+Luego vamos a ejecutar suricata en modo de monitoreo en tiempo real agregando al final nuestra interfaz de red, en mi caso es eth0
+
+Sudo suricata -c /etc/suricata/suricata/yaml -i eth0
+
+Esto nos dara un mensaje donde aparecera que el servicio esta conectado y corriendo
+
+En otra terminal vamos a escribir el comando para ver en tiempo real las alertas de IP
+
+Sudo tail -f /var/log/suricata/fast.log
+
+Con esto ya vemos el tiempo real; abrimos nuestra maquina host y hacemos la prueba con los comandos:
+
+ping (IP de la maquina virtual) = Esto nos mostrara que hay trafico por ICMP
+ssh (usuario de la maquina virtual)@(IP de la maquina virtual) = Esto nos mostrara que hay trafico de SSH, puerto 22.
+ftp (Ip de la maquina virtual) = Esto nos mostrara que hay trafico FTP, puerto 22.
+En nuestra navegador preferido colocamos nuestra dirrecion ip en la barra de direccions = Esto nos mostrara que hay trafico de HTTP, puerto 80.

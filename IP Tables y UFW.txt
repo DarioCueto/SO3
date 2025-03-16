@@ -1,0 +1,65 @@
+Instalamos los servicios para tener el puerto 80, 21 y 22:
+
+sudo apt install apache2 vsftpd openssh-server -y
+
+Iniciamos los servicios y los habilitamos:
+
+Sudo systemctl enable apache2
+Sudo systemctl start apache2
+
+*Usamos el mismo comando para ssh y vsftpd*
+
+Confirmamos el status de ambos con el comando:
+
+Sudo systemctl status apache2
+
+Lo mismo para los demas servicios
+
+Para bloquear los puerto 80, 21 y 22 usando iptables usamos el comando:
+
+Sudo iptables -A INPUT -p tcp --dport 80 -j DROP
+Sudo iptables -A INPUT -p tcp --dport 21 -j DROP
+Sudo iptables -A INPUT -p tcp --dport 22 -j DROP
+
+Para verificar que los puertos estan bloqueados usamos el comando:
+
+Sudo iptables -L
+
+Para habilitar los puertos 80, 21 y 22 usando iptables usamos el comando:
+
+Sudo iptables -D INPUT -p tcp --dport 80 -j DROP
+Sudo iptables -D INPUT -p tcp --dport 21 -j DROP
+Sudo iptables -D INPUT -p tcp --dport 22 -j DROP
+
+Para hacerlos mediante ufw primero lo instalamos:
+
+Sudo apt install ufw -y
+
+Lo iniciamos:
+
+Sudo systemctl enable ufw
+Sudo systemctl start ufw
+Sudo systemctl status ufw
+
+Para bloquear los puertos usamos el comando:
+
+Sudo ufw deny 80/tcp
+Sudo ufw deny 21/tcp
+Sudo ufw deny 22/tcp
+
+Para confirmar que los puertos estan bloqueados usamos el comando:
+
+Sudo ufw status 
+
+Para habilitarlos usamos el comando:
+
+Sudo ufw allow 80/tcp
+Sudo ufw allow 21/tcp
+Sudo ufw allow 22/tcp
+
+Confirmamos que esten habilitados:
+
+Sudo ufw status 
+
+Y listo ☺
+

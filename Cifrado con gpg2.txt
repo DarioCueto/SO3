@@ -1,0 +1,41 @@
+Instalamos gpg2 con el comando:
+
+Sudo apt install gnupg2 -y
+
+Ahora nos podemos dirigir a cualquier lugar de nuestra maquina, en mi caso lo hice en el Desktop
+
+Creamos una carpeta:
+
+mkdir cifrado
+
+Ahora creamos un archivo con un mensaje dentro:
+
+echo "Acceso no autorizado, quien entre sera condenado" > Supra.txt
+
+Ahora ciframos el archivo con el comando:
+
+gpg2 -c Supra.txt
+
+Ingresamos una clave fuerte, o una clave sencilla pero el sistema nos recordara si estamos seguros
+
+El archivo aparecera con el mismo nombre pero con la extension final .gpg
+
+Accedemos al archivo cifrado con el comando:
+
+cat Supra.txt.gpg
+
+Luego de ver que esta cifrado eliminamos el archivo normal para no confundirnos:
+
+rm Supra.txt
+
+Ahora desciframos el archivo con el comando 
+
+gpg --decrypt Supra.txt.gpg > Supraoriginal.txt
+
+Luego vemos si ya lo descriframos con el comando:
+
+cat Supraoriginal.txt
+
+Este es nuestro archivo descifrado y para confirmar vemos el cifrado por ultima vez:
+
+cat Supra.txt.gpg

@@ -1,0 +1,37 @@
+Instalamos Pam con el comando:
+
+Sudo apt install libpam-google-authenticator
+
+Configuramos con el comando:
+
+google-authenticator
+
+Luego de agregar nuestra 2FA a nuestro celular ponemos el codigo y elegimos si por defecto:
+
+Ahora configuramos Pam con el comando:
+
+sudo nano /etc/pam.d/sshd
+
+Al final del archivo agregamos la linea:
+
+auth required pam_google_authenticator.so 
+
+Guardamos la configuracion con Ctrl + x 
+
+Ahora configuramos ssh
+
+sudo nano /etc/ssh/sshd_config
+
+Buscamos la linea de interactiveauth que dice no, la cambiaremos por yes y revisamos que usepam este en yes
+
+Reiniciamos el servicio de ssh con el comando:
+
+sudo systemctl sshd.service
+
+Ahora para verificar que este funcionando el google authenticator vamos a nuestra maquina host al cmd
+
+Usamos el comando:
+
+ssh nombredelusuario@IP(de la maquina virtual)
+
+Ingresamos nuestra clave y luego nos pedira que pongamos nuestro codigo de 2FA 
