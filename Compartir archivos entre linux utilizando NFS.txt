@@ -1,0 +1,60 @@
+Luego de actualizar los repositorios con el comando Sudo apt update, instalamos NFS:
+
+Sudo apt install nfs-kernel-server
+
+Creamos el directorio con los archivos:
+
+Sudo mkdir /OS3
+cd /OS3
+touch adrian{1..100}.txt
+
+Luego de esto le damos los permisos necesarios lectura, ver y modificacion
+
+sudo chown -R nobody:nogroup /OS3
+sudo chmod -R 755 /OS3
+
+Ahora configuramos el archivo exports con el comando:
+
+sudo nano /etc/exports
+
+agregamos los siguiente, el directorio, la direccion ip y los permisos junto con el sync:
+
+/OS3 10.0.0.37/24(rw,sync,no_subtree_check)
+
+Luego le damos los permisos 
+
+sudo exportfs -a
+
+Verificamos el estado del nfs y si esta deshabilitado lo habilitamos y lo ponemos en marcha
+
+Sudo systemctl enable nfs-server
+sudo systemctl start nfs-server
+sudo systemctl status nfs-server
+
+---------------------------------------------------------------------------------------------
+
+Luego en nuestra otra maquina instalamos nfs como cliente usando el comando:
+
+Sudo apt install nfs-common
+
+Montamos el directorio compartido:
+
+sudo mount 10.0.0.37:/OS3 /mnt
+
+Ahora editamos el archivo fstab con el comando:
+
+sudo nano /etc/fstab 
+
+Agregamos al final:
+
+10.0.0.37/OS3 /mnt nfs defaults 0 0
+
+Verificamos al final haciendo un ls en la caperta /mnt
+
+ls /mnt
+
+Reiniciamos y verificamos otra vez 
+
+ls /mnt
+
+Listo ☺

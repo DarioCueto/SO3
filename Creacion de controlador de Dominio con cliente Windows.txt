@@ -1,0 +1,88 @@
+Luego de actualizar los repositorios con el comando sudo apt update instalamos samba
+
+sudo apt install krb5-user winbind libpam-winbind libnss-winbind
+
+Agregamos la autentificacion de kerberos y nuestra direccion ip con el nombre del dominio
+
+SO3.INET 
+10.0.0.47
+
+Luego de esto eliminamos la carpeta de configuracion de samba, en caso de que no lo hagamos el mismo linux nos dira que lo debemos hacer
+
+sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.bak
+
+Luego de esto editamos nuestro dominio provisional, primero entramos como super usuario y editamos el nombre y direccion ip
+
+sudo su
+samba-tool domain provision --use-rfc2307 --interactive
+
+Agregamos el nombre y las configuraciones siguientes que nos pidan, en mi caso es:
+
+SO3.INET
+SO3
+dc
+SAMBA_INTERNAL
+10.0.0.47
+
+Agregamos una clave segura, en caso de no hacerlo lanzara un error que debe de ser segura
+
+Luego configuramos el archivo de samba
+
+sudo nano /etc/samba/smb.conf
+
+Editamos el dns dentro de la configuracion de samba, sustituimos nuetra direccion ip por la 8.8.8.8
+
+Ahora editamos el dns con el comando:
+
+sudo nano /etc/resolv.conf
+
+En la primera linea ponemos correctamente nuestra direccion ip, aparecera al final como .1 y la modificamos por la nuestra .47
+Y en la segunda linea la borramos y escribimos search so3.inet
+
+Ahora habilitamos samba
+
+sudo systemctl enable samba-ad-dc
+sudo systemctl start samba-ad-dc
+sudo systemctl status samba-ad-dc
+
+Ahora editamos el archivo krb5 con el comando:
+
+Sudo nano /etc/krb5.conf
+
+En este archivo vamos a verificar nuestra direccion ip y nuestro nombre del dominio y al final del archivo editaremos las primeras dos lineas de domain-realm para ponerle nuestro nombre
+
+.so3.inet = SO3.INET
+so3.inet = SO3.INET
+
+Vamos a probar la autentificacion de nuestro usuario administrador antes de crear el de "Lanegracubana"
+
+kinit administrator 
+
+nos solicitara la clave que agregamos y nos dira en cuantos dias expirara nuestra clave
+
+Reiniciamos samba para realizar los ajustes
+
+sudo systemctl restart samba-ad-dc
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Ahora vamos a nuestra maquina de Windows
+
+Usamos el icono W + R y escribimos sysdm.cpl 
+
+Agregamos nuestro dominio so3.inet 
+
+nos dirigimos a nuestro panel de control de windows, seleccionamos centro de redes y compartido, cambiamos la configuracion del adaptador, propiedades, seleccionamos TCP/IPV4 y agregamos nuestro DNS 10.0.0.47
+
+Nos pedira nuestro usuario que es administrador y la clave propuesta, luego nos pedira que reiniciemos nuestro sistema para aplicar las configuraciones y cambio del dominio
+
+Mientras se hace esto vamos a nuestra maquina de linux y agregamos el usuario de "Lanegracubana" con la clave como matricula con el comando:
+
+samba-tool user add "Lanegracubana" --password:2024-1461
+
+Nos pedira una clave mas segura, se la agregamos y confirmamos nuestra autentificacion con:
+
+kinit Lanegracubana
+
+Volvemos a nuestra maquina de windows y entramos con el usuario de Lanegracubana y la clave que le pusimos
+
+Listo ☺

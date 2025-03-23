@@ -1,0 +1,82 @@
+Leugo de instalar los repositorios con el comando sudo apt update instalamos samba con el comando:
+
+sudo apt install samba krb5-user winbind libpam-winbind libnss-winbind -y
+
+Luego de esto habilitamos samba con el comando:
+
+Sudo systemctl enable smbd
+Sudo systemctl start smbd
+Sudo systemctl status smbd
+
+Ahora creamos la carpeta con los usuarios y grupos a compartir
+
+sudo mkdir -p /srv/samba/shared
+sudo groupadd sambashare
+sudo user add -M -d /srv/samba/shared -s /user/sbin/nologin -G sambashare adrian
+
+Creamos una clave segura con el comando:
+
+sudo smbpasswd -a adrian 
+
+Luego de ponerle la clave le damos los permisos a la carpeta de compartido:
+
+sudo chown -R :sambashare /srv/samba/shared
+sudo chmod -R 2770 /srv/samba/shared
+
+Ahora vamos a configurar el archivo de configuracion de samba con el comando:
+
+sudo nano /etc/samba/smb.conf
+
+Al final de la carpeta agregamos lo siguiente para la carpeta de compartido:
+
+[shared]
+path = /srv/samba/shared
+valid users = adrian
+guest ok = no
+writable = yes
+browsable = yes 
+
+Guardamos y reiniciamos samba
+
+sudo systemctl restart smbd
+
+Creamos los 100 archivos con el comando:
+
+sudo for i in {1..100};do touch /srv/samba/shared/adrian$i;done
+
+Si no funciona dicho comando pues nos dirijimos a la carpeta de shared usando claramente entrando como super usuario
+
+sudo su
+cd /srv/samba/shared
+touch adrian{1..100}.txt
+
+Hacemos un ls para confirmar:
+
+ls /srv/samba/shared 
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+Ahora vamos a montar el disco con los 100 archivos en nuestra VM Windows
+
+Nos dirigimos a este equipo visto en nuestro explorador de archivos, aparecera en a la izquierda y hacemos lo siguiente:
+
+Click derecho a "Este equipo", seleccionamos la opcion de conectar unidad de red
+
+Aqui agregamos nuestra direccion ip de nuestra maquina virtual linux igual al ejemplo proporcionado por windows
+
+\\10.0.0.37\shared
+
+Seleccionamos la opcion "conectar con otras credenciales", nos solicitara que entremos con nuestro usuario y clave que en este caso es adrian
+
+Nos aseguramos de tener los permisos de shared y confirmamos haciendo un ls -l
+Sino lo tenemos pues procedemos a darselo y nos dirigimos de vuelta a la VM Windows
+
+Modificamos el archivo adrian99 y agregamos:
+
+"el zumzum de la carabela"
+
+Guardamos y nos dirigimos a nuestra maquina virtual de linux y confirmamos con el comando cat
+
+cat /srv/samba/shared/adrian99
+
+Listo ☺ 
