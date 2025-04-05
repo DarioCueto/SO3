@@ -1,0 +1,21 @@
+Descargamos en DockerHub la imagen de Portainer y obtenemos el comando docker pull portainer/portainer
+
+Actualizamos los repositorios con el comando:
+
+Sudo apt update
+
+Descargamos la imagen con el comando:
+
+docker pull portainer/portainer
+
+Ahora 
+
+Sudo docker run -d -p 9000:9000 -p 8000:8000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce
+
+Ingresamos a la interfax de portainer en nuestro navegador 
+
+http://127.0.0.1:9000
+
+Creamos un usuario y una vez dentro procedemos a ver los contenedores que montamos y detenemos nginx desde su interfax grafica
+
+Accedemos a nginx para confirmar si detuvimos el contenedor 

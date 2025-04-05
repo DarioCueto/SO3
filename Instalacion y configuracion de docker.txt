@@ -1,0 +1,44 @@
+Actualizamos los repositorios con el comando:
+
+Sudo apt update
+
+Instalamos docker con el comando:
+
+Sudo apt install docker.io -y
+
+Iniciamos con el comando:
+
+Sudo systemctl enable docker
+Sudo systemctl start docker
+Sudo systemctl status
+
+Verificamos la version:
+
+docker --version
+
+Descargamos la imagen de Nginx desde la pagina docker hub, usamos el comando para descargarlo:
+
+docker pull nginx
+
+Vamos a crear el contenedor en que el puerto 8888 del host para que sea redireccionado al puerto 80 y montar un volumen persistente
+
+sudo docker run -d -p 8888:80 -v /home/website:/usr/share/nginx/html --name mynginx nginx
+
+Para ver los detalles de los contenedores:
+
+sudo docker ps -a
+
+Ahora vamos a crear la pagina html
+
+mkdir -p /home/website
+cd /home/website
+sudo nano index.html
+
+<html>
+<h1> Nombre: Dario Cueto <h1/>
+<h2> Matricula: 2024-1461 <h2/>
+</html>
+
+Nos dirigimos al navegador e ingresar
+
+http://127.0.0.1:8888

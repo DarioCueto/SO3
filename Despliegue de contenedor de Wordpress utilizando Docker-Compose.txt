@@ -1,0 +1,49 @@
+Se debe tener docker instalado para realizar esta practica
+
+Instalamos el docker compose con el comando:
+
+sudo apt install docker-compose -y
+
+Creamos el archivo 
+
+touch docker-compose.yml
+
+Lo editamos con el comando:
+
+Sudo nano docker-compose.yml
+
+Dentro del archivo agregamos los comandos para que se especifiquen las variables de entorno que usaran los contenedores, el contenedor par a la BD y uno par a el aplicativo de wordpress:
+
+version: '3.8'
+
+services:
+  wordpress:
+    image: wordpress:latest
+    ports:
+      - "8081:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: somewordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+
+Guardamos y desplegamos los contenedores con el comando:
+
+docker-compose up -d
+
+Nos vamos a nuestra navegador web y accedemos a la interfaz de configuracion de wordpress:
+
+http://localhost:8081
+
+Configuramos wordpress a nuestro uso preferido para utilizarlo
+
