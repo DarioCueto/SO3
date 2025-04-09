@@ -1,0 +1,100 @@
+Descargar el terraform con el comando:
+
+wget https://releases.hashicorp.com/terraform/1.11.3/terraform_1.11.3_linux_amd64.zip
+
+descomprimir con el comando 
+
+unzip terraform_1.11.3_linux_amd64.zip
+
+vamos a copiar esto al siguiente directorio
+
+sudo mv terraform /usr/local/bin
+
+verificar la instalacion
+
+terraform --version
+
+Configurar terraform para digital ocean
+
+creamos un directorio donde vamos a tener nuestra informacion
+
+mkdir terraform-do
+cd terraform-do
+
+Crear un token API y una llave publica
+
+Generamos un token
+Agregamos el nombre 
+30 dias 
+Acceso completo
+
+Copiamos el token para agregarlo mas adelante 
+
+Generamos la llave
+
+Ajustes
+Seguridad
+Agregamos la llave SSH
+
+En nuestra maquina virtual generamos la llave publica
+
+ssh-keygen
+
+buscamos la llave
+
+cat ~/.ssh/id_ed25519.pub
+
+copiamos la llave y la agregamos en digital ocean como clave ssh
+
+Vamos a nuestra terminal y creamos el archivo de configuracion de terraform
+
+nano main.tf
+
+Agregamos la configuracion:
+
+terraform {
+  required_providers {
+    digitalocean = {
+      source  = "digitalocean/digitalocean"
+      version = "~> 2.0"
+    }
+  }
+}
+
+provider "digitalocean" {
+  token = "TU_API_TOKEN"
+}
+
+resource "digitalocean_droplet" "OS3vm" {
+  image  = "ubuntu-22-04-x64"
+  name   = "OS3vm"
+  region = "nyc1"
+  size   = "s-1vcpu-1gb"
+  ssh_keys = [var.ssh_fingerprint]
+}
+
+variable "ssh_fingerprint" {
+  default = "TU_LLAVE_PUBLICA_FINGERPRINT"
+}
+
+output "vm_ip" {
+  value = digitalocean_droplet.OS3vm.ipv4_address
+}
+
+Iniciamos terraform
+
+terraform init
+
+validamos la informacion 
+
+terraform validate
+
+desplegamos la maquina virtual para que se cree en digital ocean
+
+terraform apply
+
+vemos que se creo y vamos a digital ocean y vamos a gotas para verla 
+
+Comprobar si podemos conectarlo via ssh
+
+ssh root@ipdelamaquina 

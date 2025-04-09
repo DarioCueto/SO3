@@ -1,0 +1,20 @@
+Actualizamos los repositorios 
+
+Sudo apt update
+
+En nuestra maquina windows creamos un archivo de texto
+
+Agregamos nuestra informacion requerida
+
+Vamos a verificar su ubicacion 
+
+En nuestra maquina de linux vamos a ejercutar el comando:
+
+ansible win -i /etc/ansible/hosts -m win_shell -a "Move-Item -Path 'C:/Users/Dario Cueto/Desktop/prueba.txt' -Destination 'C:/Users/Dario Cueto/Documents/'"
+
+Ahora vamos a reiniciar la maquina de ansible 1 
+
+Utilizamos el comando:
+
+ansible linux -i /etc/ansible/hosts -m reboot --become
+

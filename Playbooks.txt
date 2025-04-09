@@ -1,0 +1,47 @@
+Nos dirijimos a nuestra maquina windows y asegurarnos que no tenemos notepad++
+
+En nuestra maquina linux creamos un archivo llamado:
+
+Sudo nano install_notepad.yml
+
+Y agregamos:
+
+- name: Descargar e instalar Notepad++ en Windows 10
+  hosts: win
+  tasks:
+    - name: Descargar instalador de Notepad++
+      win_get_url:
+        url: https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.5.3/npp.8.5.3.Installer.x64.exe
+        dest: C:\Users\Dario Cueto\Downloads\npp_installer.exe
+
+    - name: Ejecutar el instalador de Notepad++
+      win_package:
+        path: C:\Users\Dario Cueto\Downloads\npp_installer.exe
+        arguments: /S
+        state: present
+
+Ahora lo ejecutamos utilizando el comando 
+
+ansible-playbook install_notepad.yml
+
+vamos a nuestra maquina windows e ingresamos a notepad++ y terminamos la instalacion
+
+Ahora vamos a crear un playbook en la maquina de digital ocean (ansible1) para que actualice los repositorios del sistema
+
+Creamos un archivo llamado
+
+nano up_repos.yml
+
+Y agregamos:
+
+- name: Actualizar los repositorios del sistema
+  hosts: linux
+  become: yes
+  tasks:
+    - name: Actualizar la lista de paquetes
+      apt:
+        update_cache: yes
+
+Ahora ejecutamos este archivo con el comando:
+
+ansible-playbook up_repos.yml

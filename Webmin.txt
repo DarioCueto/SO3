@@ -1,0 +1,27 @@
+Actualizamos los repositorios con el comando
+
+Sudo apt update
+
+Luego instalamos algunos repositorios para poder instalar webmin
+
+sudo apt install wget perl -y
+
+Despues de esto descargamos el webmin directamente de su pagina web
+
+wget https://www.webmin.com/download/deb/webmin-current.deb
+
+Ejecutamos con el comando dpkg para correr la instalacion
+
+sudo dpkg -i webmin-current.deb 
+
+Este error es bien comun en esta maquina y lo podemos resolver con el comando 
+
+sudo apt --fix-broken install -y 
+
+Nos aseguramos que webmin este habilitado con el comando:
+
+sudo systemctl status webmin 
+
+Ingresamos a su sitio web, su usuario y clave sera la misma que root de la maquina
+
+https://localhost:10000/ 

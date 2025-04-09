@@ -1,0 +1,111 @@
+Actualizamos los repositorios con el comando:
+
+Sudo apt update
+
+En nuestra maquina servidor instalamos ansible:
+
+Sudo apt install ansible -y
+
+Creamos una carpeta 
+
+mkdir -p /etc/ansible
+cd /etc/ansible
+
+Creamos un archivo para definir el inventario y el ssh
+
+sudo nano ansible.cfg
+
+Y agregamos lo siguiente:
+
+[defaults] 
+inventory = /etc/ansible/hosts 
+private_key_file = /home/ansible/.ssh/id_rsa hosts_key_checking = False 
+ask_become_pass = True
+
+[ssh_connection] 
+ssh_args = -o ForwardAgent=yes -o ControlMaster=auto -o ControlPersist=60s
+
+Luego creamos en esa misma carpeta el archivo hosts
+
+[win] 
+10.0.0.31
+
+[win:vars] 
+ansible_user=ansible 
+ansible_password=1424 
+ansible_port=5985 
+ansible_connection=winrm 
+ansible_winrm_transport=basic 
+ansible_winrm_server_cert_validation=ignore 
+
+[linux] 
+198.199.121.204
+
+[linux:vars] ansible_user=ansible ansible_ssh_private_key_file=~/.ssh/id_rsa ansible_become_password=1424
+
+Ahora generamos la llave ssh con el comando:
+
+ssh-keygen -t rsa -b 4096
+
+Accedemos al archivo donde se encuentra la llave 
+
+cat id_rsa.pub
+
+Nos dirigimos a nuestra maquina de Digital occean
+
+Creamos un usuario y lo configuramos con el comando que configuramos en el archivo de hosts
+
+adduser ansible
+
+Lo agregamos al Grupo:
+
+usermod -aG sudo ansible
+chsh -s /bin/bash ansible
+
+Entramos a ese usuario y creamos una carpeta para configurar el ssh
+
+mkdir ~/.ssh
+nano ~/.ssh/authorized_keys
+
+Copiamos nuestra llave publica de nuestra maquina servidor a la de Digital occean
+
+Le damos los permisos correspondientes 
+
+chmod 600 ~/.ssh/authorized_keys
+
+Comprobamos la conexion yendo a nuestra maquina servidor y usando el comando:
+
+ansible linux -m ping -u ansible
+
+Ahora nos dirigimos a nuestra maquina windows vamos a configurar el desactivar el firewall para poder hacer ping
+
+Windows + R
+wf.msc
+
+O lo buscamos directamente en la barra del buscado de tareas o a traves del panel de control
+
+Nos aseguramos que la configuracion en nuestra red este privada 
+
+Ejecutamos powershell como administrador y agregamos el siguiente script para configurar nuestra maquina windows y ansible pueda funcionar 
+
+Set-ExecutionPolicy RemoteSigned -Force
+Enable-PSRemoting -Force
+Set-Item WSMan:\localhost\Service\AllowUnencrypted -Value $true
+Set-Item WSMan:\localhost\Service\Auth\Basic -Value $true
+Set-Item WSMan:\localhost\Client\TrustedHosts -Value "*" -Force
+netsh advfirewall firewall add rule name="WinRM HTTP" dir=in action=allow protocol=TCP localport=5985
+netsh advfirewall firewall set rule group="Administración remota de Windows" new enable=yes
+Restart-Service WinRM
+$Password = ConvertTo-SecureString "1234" -AsPlainText -Force
+New-LocalUser -Name "ansible" -Password $Password -FullName "Ansible User" -Description "Usuario para Ansible"
+Add-LocalGroupMember -Group "Administradores" -Member "ansible"
+winrm enumerate winrm/config/listener
+Test-NetConnection -ComputerName localhost -Port 5985
+
+Nos dirigimos a nuestra maquina servidor y hacemos ping con el comando:
+
+ansible win -m win_ping
+
+Para nuestra maquina de linux
+
+ansible linux -m ping -u ansible
