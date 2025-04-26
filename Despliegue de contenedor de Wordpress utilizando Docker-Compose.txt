@@ -47,3 +47,13 @@ http://localhost:8081
 
 Configuramos wordpress a nuestro uso preferido para utilizarlo
 
+En caso de no funcionar o dar error utilizar esto al principio instalando algunas herramientas de python
+
+lsb_release -a
+apt update
+sudo apt install python3-pip -y
+pip3 install docker-compose
+mkdir wordpress
+cd wordpress
+vi docker-compose.yml
+

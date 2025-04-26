@@ -1,0 +1,73 @@
+Crear maquina de Rocky linux
+
+Version 8 x64
+
+La de maxima capacidad 
+
+conectarlo con la llave ssh para ahorrar paso
+
+Acceder por ssh
+
+entro al cmd de mi maquina host y entro por ssh 
+
+actualizo los repositorio con el comando:
+
+yum update
+
+Descargar el script 
+
+yum install wget
+wget http://repo.issabel.org/issabel5-netinstall.sh
+
+ls
+
+Darle permisos de ejecucion 
+
+sudo chmod 700 issabel5-netinstall.sh
+
+Ejecutamos el script
+
+./issabel5-netinstall.sh
+
+systemctl stop fail2ban
+
+Importante:
+
+lenguaje ingles
+instalamos el 16
+quitamos la segunda y tercera opcion para evitar el bloqueo de la lista 
+
+damos ok
+
+Esperamos que se instale 
+
+seleccionamos chan_pjsip
+
+le damos a que no, consigue un trabajo real pero en realidad es thank i will
+
+vamos al navegador y entramos a la direccion ip, click avanzado y acceder
+con esto entramos a nuestra interfaz grafica 
+
+entramos a pbx luego a la extension
+y configuramos la 2220 para la extension y el name profesor 
+clave: Teletubies123$
+Le damos a submit y apply config
+
+Ahora configuramos la otra 
+Extencion 2021
+Name: yts
+Secret: 240113
+
+Descargar el microsip
+
+Abrimos el navegador microSip, lo descargamos e instalamos 
+Lo ejecutamos y configuramos la extension
+
+Agregar cuenta:
+
+Nombre: Minecraft
+Servidor SIP: Ip de la maquina
+En dominio: Ip de la maquina 
+Usuario 2221
+Contraseña: 240113
+

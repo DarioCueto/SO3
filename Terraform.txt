@@ -98,3 +98,22 @@ vemos que se creo y vamos a digital ocean y vamos a gotas para verla
 Comprobar si podemos conectarlo via ssh
 
 ssh root@ipdelamaquina 
+
+Si queremos bloquear los puertos por firewall agregamos la siguiente configuracion:
+
+resource "digitalocean_firewall" "fw" {
+  name = "firewall-nombre"
+  droplet_ids = [digitalocean_droplet.ubuntu_server.id]
+
+  inbound_rule {
+    protocol         = "tcp"
+    port_range       = "22"
+    source_addresses = ["0.0.0.0/0"]
+  }
+
+  outbound_rule {
+    protocol         = "tcp"
+    port_range       = "all"
+    destination_addresses = ["0.0.0.0/0"]
+  }
+}
